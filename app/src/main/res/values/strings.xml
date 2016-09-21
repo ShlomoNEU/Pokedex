@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Pokedex</string>
+    <array name="Nav_Titles">
+        <item>Pokédex</item>
+        <item>Power Table</item>
+        <item>About</item>
+    </array>
+    <string name="PokemonList_Banner">ca-app-pub-4305314132412937/9372163002</string>
+    <string name="ListView_Ad">ca-app-pub-4305314132412937/3825157007</string>
+    <string name="Download_Sprites">Download sprites?</string>
+    <string name="No">No</string>
+    <string name="Yes">Yes</string>
+
+</resources>

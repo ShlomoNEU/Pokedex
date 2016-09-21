@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1019058928913",
+    "firebase_url": "https://hotimg-f397a.firebaseio.com",
+    "project_id": "hotimg-f397a",
+    "storage_bucket": "hotimg-f397a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019058928913:android:42ef813c9395bd5d",
+        "android_client_info": {
+          "package_name": "com.shne.pokedex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019058928913-mqmadm1aplo9j3n85pmdvudvkccvt9af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr_JLP3P3QeXH1tOaz8Drx7vgpsOF3lc4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
