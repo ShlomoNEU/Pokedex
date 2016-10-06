@@ -335,7 +335,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
 
         try {
             mHandler.sendEmptyMessage(2);
-            URL url = new URL("https://hotimg-f397a.firebaseapp.com/ID"+pokemon.getID());
+            URL url = new URL("https://hotimg-f397a.firebaseapp.com/New/ID" + pokemon.getID() + ".txt");
             //URL url = new URL("https://hotimg-f397a.firebaseapp.com/New/ID341.txt");
             InputStream is  = url.openStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
