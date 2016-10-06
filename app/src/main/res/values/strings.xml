@@ -10,5 +10,12 @@
     <string name="Download_Sprites">Download sprites?</string>
     <string name="No">No</string>
     <string name="Yes">Yes</string>
+    <string name="search_term">Search Term…</string>
+    <string name="search_button">Search Button</string>
+    <string name="evoltion_chain">Evoltion Chain</string>
+    <string name="height">Height</string>
+    <string name="type">Type</string>
+    <string name="weight">Weight</string>
+    <string name="open_Pokemon_Data">Open Pokemon Data</string>
 
 </resources>
