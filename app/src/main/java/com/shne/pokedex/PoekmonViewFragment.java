@@ -363,7 +363,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
                         hashMap.put(name, bitmap);
                         hashMaps.add(hashMap);
                     }catch (Exception e){
-                        hashMaps = new  ArrayList<HashMap<String,Bitmap>>();
+                        hashMaps = new ArrayList<HashMap<String, Bitmap>>();
                     }
                 }
                 pokemon.setVarieties(hashMaps);
