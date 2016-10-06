@@ -25,13 +25,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <ImageView
-
         android:id="@+id/TitleImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_below="@+id/Pokemon_name"
         android:layout_toEndOf="@+id/Pokemon_name"
-        android:contentDescription=""
+        android:contentDescription="Pokemon Main Pic"
         android:src="@drawable/eevee" />
 
     <LinearLayout
@@ -54,6 +53,7 @@
             android:layout_width="60dp"
             android:layout_height="34dp"
             android:layout_margin="5dp"
+            android:contentDescription="Type 1"
             android:src="@drawable/bug" />
 
         <ImageView
@@ -61,6 +61,7 @@
             android:layout_width="60dp"
             android:layout_height="34dp"
             android:layout_margin="5dp"
+            android:contentDescription="Type 2"
             android:src="@drawable/bug" />
 
     </LinearLayout>
@@ -109,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView2"
-            android:text="Weight"
+            android:text="@string/weight"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </RelativeLayout>
 
