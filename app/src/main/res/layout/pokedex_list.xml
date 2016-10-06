@@ -44,7 +44,7 @@
             android:layout_below="@+id/SearchLayout"
             android:layout_marginBottom="2dp"
             android:layout_toEndOf="@+id/fab"
-            android:headerDividersEnabled="true" />
+            android:headerDividersEnabled="true"></ListView>
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"

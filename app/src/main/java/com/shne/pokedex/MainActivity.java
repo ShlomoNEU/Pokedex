@@ -16,7 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-
+/**
+ * Created by Shlomo on 23-Aug-16.
+ */
 public class MainActivity extends AppCompatActivity {
     Context context = this;
     private DrawerLayout mDrawerLayout;
@@ -35,11 +37,10 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.drawer_listView);
         mDrawerList.setOnItemClickListener(new DrawerListner());
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.list_item_drawer, getResources().getStringArray(R.array.Nav_Titles)));
 
         ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setHomeButtonEnabled(true);

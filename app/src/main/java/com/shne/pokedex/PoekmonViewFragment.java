@@ -41,6 +41,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * Created by Shlomo on 24-Aug-16.
+ */
 public class PoekmonViewFragment extends AppCompatActivity {
 
     public static final String ARG_NAME = "ARG_NAME";
@@ -71,7 +74,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
             switch (msg.what) {
                 case 1:
                     //UpdateView
-                    LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     parms.weight = 1;
                     if (bitmapHashMap.get(HASHBitMap_Key_Type1_Pic) != null) {
                         Type1.setImageBitmap(bitmapHashMap.get(HASHBitMap_Key_Type1_Pic));
@@ -104,7 +107,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
                             Snackbar_Yes = (Button) snackView.findViewById(R.id.snackbar_action_left);
                             Snackbar_No = (Button) snackView.findViewById(R.id.snackbar_action_right);
                             snackbarLayout.addView(snackView, 0);
-                            textView.setText(R.string.open_Pokemon_Data);
+                            textView.setText("Open Pokemon Data");
                             textView.setTextColor(Color.WHITE);
                             Snackbar_Yes.setTextColor(Color.WHITE);
                             Snackbar_No.setTextColor(Color.WHITE);
@@ -197,7 +200,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
                                 Snackbar_Yes = (Button) snackView.findViewById(R.id.snackbar_action_left);
                                 Snackbar_No = (Button) snackView.findViewById(R.id.snackbar_action_right);
                                 snackbarLayout.addView(snackView, 0);
-                                textView.setText(R.string.open_Pokemon_Data);
+                                textView.setText("Open Pokemon Data");
                                 textView.setTextColor(Color.WHITE);
                                 Snackbar_Yes.setTextColor(Color.WHITE);
                                 Snackbar_No.setTextColor(Color.WHITE);
@@ -248,6 +251,8 @@ public class PoekmonViewFragment extends AppCompatActivity {
                 case 2:
                     if (mProgressStatus >= 85 && mProgressStatus <= 100) {
                         mProgressStatus -= 85;
+                    } else {
+                        mProgressStatus = mProgressStatus;
                     }
                     progressDialog.setProgress(mProgressStatus);
                     break;
@@ -278,7 +283,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
         progressDialog.setMax(100);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
-        bitmapHashMap = new HashMap<>();
+        bitmapHashMap = new HashMap<String, Bitmap>();
         pokemon = new Pokemon(getIntent().getExtras().getString(ARG_NAME),getIntent().getExtras().getInt(ARG_NUM));
         LayoutInflater inflater = getLayoutInflater();
 
@@ -358,7 +363,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
                         hashMap.put(name, bitmap);
                         hashMaps.add(hashMap);
                     }catch (Exception e){
-                        hashMaps = new ArrayList<>();
+                        hashMaps = new  ArrayList<HashMap<String,Bitmap>>();
                     }
                 }
                 pokemon.setVarieties(hashMaps);
