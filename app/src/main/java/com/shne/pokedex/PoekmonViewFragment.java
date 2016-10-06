@@ -411,6 +411,7 @@ public class PoekmonViewFragment extends AppCompatActivity {
                                 tmpEvo.add( tmp + " "+jsonObject.getString(tmp));
                             }
 
+
                         }
                         if (i == 1) {
                             pokemon.setEVO2ID(tmpID);
