@@ -16,19 +16,15 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
 /**
  * Created by Shlomo on 23-Aug-16.
  */
 public class MainActivity extends AppCompatActivity {
+    Context context = this;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private FrameLayout ContentPane;
     private MainActivity activity = this;
-    Context context = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

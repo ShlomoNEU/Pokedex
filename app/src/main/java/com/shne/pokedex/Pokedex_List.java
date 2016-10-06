@@ -49,16 +49,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by Shlomo on 24-Aug-16.
  *
  */
 public class Pokedex_List extends Fragment {
+    View rootView; // Globlizing the MainView
     int  clickcounter =0;
-    private ArrayList<Pokemon> Main_Pokemons_Object,PokemonListObject,TPokemonListObject;
-    private ListView listView;
-    private FloatingActionButton floatingActionButton;
-    private Snackbar snackbar;
     int cnt = 0,num=0,num1=0;
     int [] location;
     ArrayList<NativeExpressAdView> ads;
@@ -66,9 +65,140 @@ public class Pokedex_List extends Fragment {
     HashMap<Integer,String> integerStringHashMap;
     HashMap<Integer,Integer>ReversLocation;
     HashMap<String,Integer> stringIntegerHashMap;
+    private ArrayList<Pokemon> Main_Pokemons_Object, PokemonListObject;
+    Runnable runnable300 = new Runnable() {
+        @Override
+        public void run() {
+            CustomDownload(150, 300);
+            handler.sendEmptyMessage(3);
+            handler.sendEmptyMessage(1);
 
+
+        }
+    };
+    Runnable runnable150 = new Runnable() {
+        @Override
+        public void run() {
+            new Thread(runnable300).start();
+            CustomDownload(0, 150);
+            handler.sendEmptyMessage(1);
+
+        }
+    };
+    Runnable runnableEND = new Runnable() {
+        @Override
+        public void run() {
+            CustomDownload(600, Main_Pokemons_Object.size());
+            handler.sendEmptyMessage(3);
+            handler.sendEmptyMessage(1);
+        }
+    };
+    Runnable runnable600 = new Runnable() {
+        @Override
+        public void run() {
+            new Thread(runnableEND).start();
+            CustomDownload(450, 600);
+            handler.sendEmptyMessage(3);
+            handler.sendEmptyMessage(1);
+
+        }
+    };
+    Runnable runnable450 = new Runnable() {
+        @Override
+        public void run() {
+            new Thread(runnable600).start();
+            CustomDownload(300, 450);
+            handler.sendEmptyMessage(3);
+            handler.sendEmptyMessage(1);
+
+        }
+    };
+    Runnable SaveToFileBitmaps = new Runnable() {
+        @Override
+        public void run() {
+
+            for (int i = 0; i < Main_Pokemons_Object.size(); i++) {
+                String FILENAME = Main_Pokemons_Object.get(i).getNumberToString() + ".png";
+                File file = new File(getActivity().getFilesDir(), FILENAME);
+                try {
+                    FileOutputStream fos = getActivity().openFileOutput(FILENAME, Context.MODE_PRIVATE);
+                    if (Main_Pokemons_Object.get(i).getThumb() != null && fos != null) {
+                        Main_Pokemons_Object.get(i).getThumb().compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        handler.sendEmptyMessage(4);
+                    }
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    private ListView listView;
+    private FloatingActionButton floatingActionButton;
+    private Snackbar snackbar;
     private ProgressDialog progressDialog;
     private  ProgressDialog progressDialog1;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (cnt >= 720) {
+                        Toast.makeText(getActivity(), "Done Refrash", Toast.LENGTH_SHORT).show();
+                        floatingActionButton.hide();
+                        progressDialog.dismiss();
+                        progressDialog = new ProgressDialog(context);
+                        progressDialog.setTitle("Save To File");
+                        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Save for one time Download", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progressDialog1 = new ProgressDialog(context);
+                                progressDialog1.setMax(721);
+                                progressDialog1.setTitle("Saving Files");
+                                progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                progressDialog1.show();
+                                new Thread(SaveToFileBitmaps).start();
+                            }
+                        });
+                        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Don't Want to Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        progressDialog.show();
+                    }
+
+                    break;
+                case 2:
+                    cnt++;
+                    progressDialog.setProgress(cnt);
+                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
+                    listView.deferNotifyDataSetChanged();
+
+                    break;
+                case 3:
+                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
+                    listView.deferNotifyDataSetChanged();
+                    break;
+                case 4:
+                    num1++;
+                    progressDialog1.setProgress(num1);
+                    if (num1 >= 720 && progressDialog1.isShowing()) {
+                        progressDialog1.dismiss();
+                    }
+                    break;
+                default:
+                    num++;
+                    if (num <= 4) {
+                        floatingActionButton.setImageResource(R.drawable.ic_sync_black);
+                    } else {
+                        floatingActionButton.hide();
+                    }
+
+            }
+
+        }
+    };
     //    public static final String ARG_position = "ARG_postion";
     private EditText SearchET;
 
@@ -77,7 +207,7 @@ public class Pokedex_List extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MobileAds.initialize(getActivity().getApplicationContext(), "ca-app-pub-4305314132412937~7895429800");
 
-        View rootView = inflater.inflate(R.layout.pokedex_list, null);
+        rootView = inflater.inflate(R.layout.pokedex_list, null);
         context = getActivity();
         //Configure Base Of view//
         integerStringHashMap = new HashMap<>();
@@ -117,7 +247,6 @@ public class Pokedex_List extends Fragment {
         }
         adCretor();
 
-        TPokemonListObject = new ArrayList<>();
         Main_Pokemons_Object = ArrayOfPokemon();
         PokemonListObject = Main_Pokemons_Object;
         floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -249,104 +378,14 @@ public class Pokedex_List extends Fragment {
         return rootView;
     }
 
-    Runnable runnable150 = new Runnable() {
-        @Override
-        public void run() {
-            new Thread(runnable300).start();
-            CustomDownload(0,150);
-            handler.sendEmptyMessage(1);
-
-        }
-    };
-    Runnable runnable300 = new Runnable() {
-        @Override
-        public void run() {
-            CustomDownload(150,300);
-            handler.sendEmptyMessage(3);
-            handler.sendEmptyMessage(1);
-
-
-        }
-    };
-    Runnable runnable450 = new Runnable() {
-        @Override
-        public void run() {
-            new Thread(runnable600).start();
-            CustomDownload(300,450);
-            handler.sendEmptyMessage(3);
-            handler.sendEmptyMessage(1);
-
-        }
-    };
-    Runnable runnable600 = new Runnable() {
-        @Override
-        public void run() {
-            new Thread(runnableEND).start();
-            CustomDownload(450,600);
-            handler.sendEmptyMessage(3);
-            handler.sendEmptyMessage(1);
-
-        }
-    };
-    Runnable runnableEND = new Runnable() {
-        @Override
-        public void run() {
-            CustomDownload(600,Main_Pokemons_Object.size());
-            handler.sendEmptyMessage(3);
-            handler.sendEmptyMessage(1);
-        }
-    };
-
-
-
     void CustomDownload(int start,int end){
-
             for(int i = start; i<end;i++){
                 if(!Main_Pokemons_Object.get(i).getName().equals("Ad")){
-
-                    String tmp = String.valueOf(Main_Pokemons_Object.get(i).getID());
-                    String tmp1 = String.valueOf(Main_Pokemons_Object.get(i).getName().toLowerCase());
-                    if (tmp.length() == 1) {
-                        tmp = "00" + tmp;
-                    } else if (tmp.length() == 2) {
-                        tmp = "0" + tmp;
-                    }
-                    if (i >= 649) //wich means ID 650
-                        Main_Pokemons_Object.get(i).setThumb(LoadImageFromWebOperations("http://www.serebii.net/pokedex-xy/icon/" + tmp + ".png"));
-
-                    else {
-                        Main_Pokemons_Object.get(i).setThumb(LoadImageFromWebOperations("https://img.pokemondb.net/sprites/black-white/normal/" + tmp1 + ".png"));
-                        if(!Main_Pokemons_Object.get(i).getName().equals("Ad") && Main_Pokemons_Object.get(i).getThumb() == null){
-                            Main_Pokemons_Object.get(i).setThumb(LoadImageFromWebOperations("http://www.serebii.net/pokedex-xy/icon/" + tmp + ".png"));
-                        }
-                    }
+                    Main_Pokemons_Object.get(i).setThumb(LoadImageFromWebOperations("http://www.pokestadium.com/assets/img/sprites/" + Main_Pokemons_Object.get(i).getID() + ".png"));
                     handler.sendEmptyMessage(2);
-
                 }
             }
     }
-
-    Runnable SaveToFileBitmaps = new Runnable() {
-        @Override
-        public void run() {
-
-            for(int i = 0;i<Main_Pokemons_Object.size();i++) {
-                String FILENAME = Main_Pokemons_Object.get(i).getNumberToString() + ".png";
-                File file = new File(getActivity().getFilesDir(), FILENAME);
-                try {
-                    FileOutputStream fos = getActivity().openFileOutput(FILENAME, Context.MODE_PRIVATE);
-                    if (Main_Pokemons_Object.get(i).getThumb() != null && fos != null) {
-                        Main_Pokemons_Object.get(i).getThumb().compress(Bitmap.CompressFormat.PNG, 100, fos);
-                        handler.sendEmptyMessage(4);
-                    }
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
-
 
     Bitmap LoadImageFromWebOperations(String url) {
         try {
@@ -355,67 +394,7 @@ public class Pokedex_List extends Fragment {
             return null;
         }
     }
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    if(cnt >= 720) {
-                        Toast.makeText(getActivity(), "Done Refrash", Toast.LENGTH_SHORT).show();
-                        floatingActionButton.hide();
-                        progressDialog.dismiss();
-                        progressDialog = new ProgressDialog(context);
-                        progressDialog.setTitle("Save To File");
-                        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Save for one time Download", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                progressDialog1 = new ProgressDialog(context);
-                                progressDialog1.setMax(721);
-                                progressDialog1.setTitle("Saving Files");
-                                progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                progressDialog1.show();
-                                new Thread(SaveToFileBitmaps).start();
-                            }
-                        });
-                        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Don't Want to Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                        progressDialog.show();
-                    }
 
-                    break;
-                case 2:
-                    cnt++;
-                    progressDialog.setProgress(cnt);
-                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
-                    listView.deferNotifyDataSetChanged();
-
-                    break;
-                case 3:
-                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
-                    listView.deferNotifyDataSetChanged();
-                    break;
-                case 4:
-                    num1++;
-                    progressDialog1.setProgress(num1);
-                    if(num1 >= 720 && progressDialog1.isShowing()){
-                        progressDialog1.dismiss();
-                    }
-                    break;
-                default:
-                    num++;
-                    if(num <=4){
-                        floatingActionButton.setImageResource(R.drawable.ic_sync_black);
-                    }else{
-                        floatingActionButton.hide();
-                    }
-
-            }
-
-        }
-    };
     ArrayList<Pokemon> ArrayOfPokemon(){
 
         InputStream inputStream = getResources().openRawResource(R.raw.pokedexlist);
@@ -477,6 +456,77 @@ public class Pokedex_List extends Fragment {
 
     }
 
+    Integer getRandomInt(int Low, int High) {
+        Random r = new Random();
+        if (High == Low)
+            High = Low + 1;
+        return r.nextInt(High - Low) + Low;
+    }
+
+    public int getRandomWithExclusion(int start, int end, int... exclude) {
+        Random rnd = new Random();
+        int random = start + rnd.nextInt(end - start + 1 - exclude.length);
+        for (int ex : exclude) {
+            if (random < ex) {
+                break;
+            }
+            random++;
+        }
+        return random;
+    }
+
+    void adCretor() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float deviceWidthInDp = displayMetrics.widthPixels / displayMetrics.density;
+        int adWidth = (int) (deviceWidthInDp);
+        if (adWidth < 280) {
+            adWidth = 280;
+        }
+        ads = new ArrayList<NativeExpressAdView>();
+        for (int i = 0; i < location.length; i++) {
+            ads.add(new NativeExpressAdView(context));
+            ads.get(i).setAdSize(new AdSize(adWidth, 80));
+            ads.get(i).setAdUnitId(getResources().getString(R.string.ListView_Ad));
+            // Create an ad request.
+            AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+            // Optionally populate the ad request builder.
+            ads.get(i).loadAd(adRequestBuilder.build());
+        }
+    }
+
+    NativeExpressAdView addAd() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float deviceWidthInDp = displayMetrics.widthPixels / displayMetrics.density;
+        int adWidth = (int) (deviceWidthInDp);
+        if (adWidth < 280) {
+            adWidth = 280;
+        }
+        ads.add(new NativeExpressAdView(context));
+        ads.get(ads.size() - 1).setAdSize(new AdSize(adWidth, 80));
+        ads.get(ads.size() - 1).setAdUnitId(getResources().getString(R.string.ListView_Ad));
+        // Create an ad request.
+        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        // Optionally populate the ad request builder.
+        ads.get(ads.size() - 1).loadAd(adRequestBuilder.build());
+        return ads.get(ads.size() - 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String id = data.getStringExtra("PokeID");
+                String name = data.getStringExtra("PokeIString");
+                if (Integer.valueOf(id) != 0) {
+                    Intent intent = new Intent(getActivity().getBaseContext(), PoekmonViewFragment.class);
+                    intent.putExtra(PoekmonViewFragment.ARG_NAME, name);
+                    intent.putExtra(PoekmonViewFragment.ARG_NUM, Integer.valueOf(id));
+                    startActivityForResult(intent, 1);
+                }
+            }
+        }
+    }
 
     private class CustomList extends BaseAdapter {
         ArrayList<Pokemon> pokemons;
@@ -545,73 +595,25 @@ public class Pokedex_List extends Fragment {
             }
         }
     }
-    Integer getRandomInt(int Low,int High){
-        Random r = new Random();
-        if(High == Low)
-            High = Low+1;
-        return r.nextInt(High-Low) + Low;
-    }
-    public int getRandomWithExclusion(int start, int end, int... exclude) {
-        Random rnd = new Random();
-        int random = start + rnd.nextInt(end - start + 1 - exclude.length);
-        for (int ex : exclude) {
-            if (random < ex) {
-                break;
-            }
-            random++;
-        }
-        return random;
-    }
+
     private class ListItemListner implements ListView.OnItemClickListener{
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             int position = i;
             if (!PokemonListObject.get(i).getName().equals("Ad")) {
-                Intent intent = new Intent(getActivity().getBaseContext(), PoekmonViewFragment.class);
-                intent.putExtra(PoekmonViewFragment.ARG_NAME, PokemonListObject.get(i).getName());
-                intent.putExtra(PoekmonViewFragment.ARG_NUM, PokemonListObject.get(i).getID());
-                startActivity(intent);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getActiveNetworkInfo().isConnected() && connectivityManager.getActiveNetworkInfo() != null) {
+                    Intent intent = new Intent(getActivity().getBaseContext(), PoekmonViewFragment.class);
+                    intent.putExtra(PoekmonViewFragment.ARG_NAME, PokemonListObject.get(i).getName());
+                    intent.putExtra(PoekmonViewFragment.ARG_NUM, PokemonListObject.get(i).getID());
+                    startActivityForResult(intent, 1);
+                } else {
+                    Snackbar snackbar = Snackbar.make(rootView, "", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                }
             }
 
         }
     }
-
-    void  adCretor(){
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float deviceWidthInDp = displayMetrics.widthPixels / displayMetrics.density;
-        int adWidth = (int)(deviceWidthInDp);
-        if (adWidth<280) {
-            adWidth = 280;
-        }
-        ads = new ArrayList<NativeExpressAdView>();
-        for (int i =0;i< location.length;i++){
-            ads.add(new NativeExpressAdView(context));
-            ads.get(i).setAdSize(new AdSize(adWidth, 100));
-            ads.get(i).setAdUnitId(getResources().getString(R.string.ListView_Ad));
-            // Create an ad request.
-            AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-            // Optionally populate the ad request builder.
-            ads.get(i).loadAd(adRequestBuilder.build());
-        }
-    }
-    NativeExpressAdView addAd(){
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float deviceWidthInDp = displayMetrics.widthPixels / displayMetrics.density;
-        int adWidth = (int)(deviceWidthInDp);
-        if (adWidth<280) {
-            adWidth = 280;
-        }
-        ads.add(new NativeExpressAdView(context));
-        ads.get(ads.size()-1).setAdSize(new AdSize(adWidth, 100));
-        ads.get(ads.size()-1).setAdUnitId(getResources().getString(R.string.ListView_Ad));
-        // Create an ad request.
-        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        // Optionally populate the ad request builder.
-        ads.get(ads.size()-1).loadAd(adRequestBuilder.build());
-        return ads.get(ads.size()-1);
-    }
-
-
-
 }

@@ -2,184 +2,177 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#3F51B5"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3F51B5"
+    android:orientation="vertical"
     >
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#3F51B5"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:background="#3F51B5"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:textColor="@color/abc_background_cache_hint_selector_material_light"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/Pokemon_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Large Text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <ImageView
 
+        android:id="@+id/TitleImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/TitleImage"
-        android:src="@drawable/eevee"
         android:layout_below="@+id/Pokemon_name"
-        android:layout_toEndOf="@+id/Pokemon_name" />
+        android:layout_toEndOf="@+id/Pokemon_name"
+        android:contentDescription=""
+        android:src="@drawable/eevee" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Pokemon_name"
         android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
+        android:layout_below="@+id/Pokemon_name"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Type"
-            android:id="@+id/textView3" />
+            android:text="@string/type"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
-            android:src="@drawable/bug"
-            android:layout_width="60dp"
-            android:layout_height="34dp"
-            android:layout_margin="5dp"
             android:id="@+id/Type1"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/TitleImage" />
-
-        <ImageView
-            android:src="@drawable/bug"
             android:layout_width="60dp"
             android:layout_height="34dp"
-            android:id="@+id/Type2"
-            android:layout_below="@+id/Type1"
             android:layout_margin="5dp"
-            android:layout_alignParentStart="true" />
+            android:src="@drawable/bug" />
+
+        <ImageView
+            android:id="@+id/Type2"
+            android:layout_width="60dp"
+            android:layout_height="34dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/bug" />
 
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/TitleImage"
-        android:layout_alignStart="@+id/TitleImage"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout">
+        android:layout_alignStart="@+id/TitleImage"
+        android:layout_below="@+id/TitleImage">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Height"
-            android:textColor="@color/abc_background_cache_hint_selector_material_light"
+            android:text="@string/height"
 
-            android:id="@+id/textView" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
         <TextView
+            android:id="@+id/Pokemon_Height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmallInverse"
-            android:textColor="@color/abc_background_cache_hint_selector_material_light"
-            android:text="Height"
-            android:id="@+id/Pokemon_Height" />
+            android:text="@string/height"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginTop="5dp"
+        android:id="@+id/relativeLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout"
         android:layout_alignStart="@+id/TitleImage"
-        android:id="@+id/relativeLayout2">
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginTop="5dp">
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Weight"
-            android:textColor="@color/abc_background_cache_hint_selector_material_light"
-            android:id="@+id/textView2" />
+            android:text="@string/weight"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <TextView
+            android:id="@+id/Pokemon_Weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmallInverse"
-                        android:textColor="@color/abc_background_cache_hint_selector_material_light"
             android:text="Weight"
-            android:id="@+id/Pokemon_Weight" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_back"
-        android:clickable="true"
-        android:background="#F50057"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/data_circle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        app:backgroundTint="#F50057"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp" />
+        android:background="#F50057"
+        android:clickable="true"
+        android:src="@drawable/data_circle"
+        app:backgroundTint="#F50057" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/relativeLayout2"
-        android:layout_alignStart="@+id/Type2"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/line1"
-        android:weightSum="3"
-        android:baselineAligned="false"
         android:layout_above="@+id/fab_back"
-        android:layout_marginBottom="5dp">
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_marginBottom="5dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <ListView
+            android:id="@+id/Evo1ListView"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:id="@+id/Evo1ListView"
-            android:clickable="false"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:clickable="false">
         </ListView>
 
         <ListView
+            android:id="@+id/Evo2ListView"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:clickable="false"
             android:layout_weight="1"
-            android:id="@+id/Evo2ListView" />
+            android:clickable="false" />
 
         <ListView
+            android:id="@+id/Evo3ListView"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:clickable="false"
             android:layout_weight="1"
-            android:id="@+id/Evo3ListView"/>
+            android:clickable="false" />
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Evoltion Chain"
-        android:id="@+id/textView4"
         android:layout_alignBottom="@+id/relativeLayout2"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="2dp" />
+        android:layout_marginBottom="2dp"
+        android:text="@string/evoltion_chain"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
 </FrameLayout>
