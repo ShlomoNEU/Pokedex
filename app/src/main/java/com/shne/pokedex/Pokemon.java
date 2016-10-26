@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,14 +24,13 @@ public class Pokemon extends Object {
     private Pokemon pokemon =this;
     private String Height;
     private String weight;
-    private String  evolution_chain_URL;
+    private String evolution_chain_URL, EggType1, EggType2;
     private String EVONAME,EVOCouse,EVOID;
     private ArrayList<String> EVO2Name,EVO2Couse,EVO2ID;
     private ArrayList<String> EVO3Name,EVO3Couse,EVO3ID;
     private ArrayList<HashMap<String,Bitmap>> Varieties;
-
-
-
+    private Bitmap Type1, Type2;
+    private List<PokemonDataListener> listeners = new ArrayList<PokemonDataListener>();
     //Cunstractors
     public Pokemon(String name, int ID, Bitmap thumb) {
         EVO2Name = new ArrayList<String>();
@@ -46,6 +44,9 @@ public class Pokemon extends Object {
         this.ID = ID;
         this.thumb = thumb;
     }
+
+    //setters And getters
+
     public Pokemon(String name,int ID) {
         EVO2Name = new ArrayList<String>();
         EVO2Couse = new ArrayList<String>();
@@ -58,22 +59,37 @@ public class Pokemon extends Object {
         this.ID = ID;
     }
 
-    //setters And getters
-
     public Bitmap getThumb() {
         return thumb;
+    }
+
+    public void setThumb(Bitmap thumb) {
+        this.thumb = thumb;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getID() {
         return ID;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     public String[] getPokemon_type() {
         return pokemon_type;
+    }
+
+    public void setPokemon_type(String pokemon_type) {
+        this.pokemon_type[0] = pokemon_type;
+        this.pokemon_type[1] = null;
     }
 
     public String getNumberToString(){
@@ -90,25 +106,28 @@ public class Pokemon extends Object {
         return Height;
     }
 
+    public void setHeight(String height) {
+        Height = height;
+    }
+
     public String getWeight() {
         return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     public String getEvolution_chain_URL() {
         return evolution_chain_URL;
     }
 
-    public String getSpriteLink() {
-        return spriteLink;
-    }
-
-    public Bitmap getSprite() {
-        return sprite;
-    }
-
-
     public void setEvolution_chain_URL(String evolution_chain_URL) {
         this.evolution_chain_URL = evolution_chain_URL;
+    }
+
+    public String getSpriteLink() {
+        return spriteLink;
     }
 
     public void setSpriteLink(String spriteLink) {
@@ -122,37 +141,16 @@ public class Pokemon extends Object {
         this.spriteLink = spriteLink;
     }
 
+    public Bitmap getSprite() {
+        return sprite;
+    }
+
     public void setSprite(Bitmap sprite) {
         this.sprite = sprite;
     }
 
-    public void setHeight(String height) {
-        Height = height;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public void setThumb(Bitmap thumb) {
-        this.thumb = thumb;
-    }
-
     public void setPokemon_type(String[] pokemon_type) {
         this.pokemon_type = pokemon_type;
-    }
-
-    public void setPokemon_type(String pokemon_type) {
-        this.pokemon_type[0] = pokemon_type;
-        this.pokemon_type[1] = null;
     }
 
     public String getEVONAME() {
@@ -235,6 +233,61 @@ public class Pokemon extends Object {
         Varieties = varieties;
     }
 
+    public String getEggType2() {
+        return EggType2;
+    }
+
+    public void setEggType2(String eggType2) {
+        EggType2 = eggType2;
+    }
+
+    public String getEggType1() {
+        return EggType1;
+    }
+
+    public void setEggType1(String eggType1) {
+        EggType1 = eggType1;
+    }
+
+    public Bitmap getType2() {
+        return Type2;
+    }
+
+    public void setType2(Bitmap type2) {
+        Type2 = type2;
+    }
+
+    public Bitmap getType1() {
+        return Type1;
+    }
+
+    public void setType1(Bitmap type1) {
+        Type1 = type1;
+    }
+
+    public void addListener(PokemonDataListener toAdd) {
+        listeners.add(toAdd);
+    }
+
+    public void NotifyAllListeners() {
+        for (PokemonDataListener hl : listeners)
+            hl.NotifyAllDataArrived();
+    }
+
+    public void NotifyPokeSet() {
+        for (PokemonDataListener hl : listeners)
+            hl.pokemonSetariived(this);
+    }
+
+    interface PokemonDataListener {
+        Pokemon DataArrived();
+
+        void pokemonSetariived(Pokemon pokemon);
+
+        void DataArrived(Pokemon pokemon);
+
+        void NotifyAllDataArrived();
+    }
 
     public class Pokemon_type{
         public static final int BUG = 0;
@@ -381,27 +434,6 @@ public class Pokemon extends Object {
             }
         }
 
-    }
-
-    interface PokemonDataListener{
-        Pokemon DataArrived();
-        void pokemonSetariived(Pokemon pokemon);
-        void DataArrived(Pokemon pokemon);
-        void NotifyAllDataArrived();
-    }
-
-    private List<PokemonDataListener> listeners = new ArrayList<PokemonDataListener>();
-
-    public void addListener(PokemonDataListener toAdd){
-        listeners.add(toAdd);
-    }
-    public void NotifyAllListeners(){
-        for (PokemonDataListener hl : listeners)
-            hl.NotifyAllDataArrived();
-    }
-    public void NotifyPokeSet(){
-        for (PokemonDataListener hl : listeners)
-            hl.pokemonSetariived(this);
     }
 }
 

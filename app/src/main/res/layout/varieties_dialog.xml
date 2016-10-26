@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#3F51B5"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_bg"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/DialogListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView5"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView5"
         android:clickable="false"
         android:divider="@drawable/list_divider"></ListView>
 
     <TextView
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Pokemon Varirties"
-        android:id="@+id/textView5"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:text="Pokemon Varirties"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="40dp" />
 </RelativeLayout>

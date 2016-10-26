@@ -21,6 +21,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -65,7 +68,75 @@ public class Pokedex_List extends Fragment {
     HashMap<Integer,String> integerStringHashMap;
     HashMap<Integer,Integer>ReversLocation;
     HashMap<String,Integer> stringIntegerHashMap;
+    private boolean mIsScrollingUp;
+    private int mLastFirstVisibleItem = 0;
     private ArrayList<Pokemon> Main_Pokemons_Object, PokemonListObject;
+    private ListView listView;
+    private FloatingActionButton floatingActionButton;
+    private Snackbar snackbar;
+    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog1;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (cnt >= 720) {
+                        Toast.makeText(getActivity(), "Done Refrash", Toast.LENGTH_SHORT).show();
+                        floatingActionButton.hide();
+                        progressDialog.dismiss();
+                        progressDialog = new ProgressDialog(context);
+                        progressDialog.setTitle("Save To File");
+                        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Save for one time Download", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progressDialog1 = new ProgressDialog(context);
+                                progressDialog1.setMax(721);
+                                progressDialog1.setTitle("Saving Files");
+                                progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                progressDialog1.show();
+                                new Thread(SaveToFileBitmaps).start();
+                            }
+                        });
+                        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Don't Want to Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        progressDialog.show();
+                    }
+
+                    break;
+                case 2:
+                    cnt++;
+                    progressDialog.setProgress(cnt);
+                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
+                    listView.deferNotifyDataSetChanged();
+
+                    break;
+                case 3:
+                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
+                    listView.deferNotifyDataSetChanged();
+                    break;
+                case 4:
+                    num1++;
+                    progressDialog1.setProgress(num1);
+                    if (num1 >= 720 && progressDialog1.isShowing()) {
+                        progressDialog1.dismiss();
+                    }
+                    break;
+                default:
+                    num++;
+                    if (num <= 4) {
+                        floatingActionButton.setImageResource(R.drawable.ic_sync_black);
+                    } else {
+                        floatingActionButton.hide();
+                    }
+
+            }
+
+        }
+    };
     Runnable runnable300 = new Runnable() {
         @Override
         public void run() {
@@ -133,72 +204,6 @@ public class Pokedex_List extends Fragment {
             }
         }
     };
-    private ListView listView;
-    private FloatingActionButton floatingActionButton;
-    private Snackbar snackbar;
-    private ProgressDialog progressDialog;
-    private  ProgressDialog progressDialog1;
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    if (cnt >= 720) {
-                        Toast.makeText(getActivity(), "Done Refrash", Toast.LENGTH_SHORT).show();
-                        floatingActionButton.hide();
-                        progressDialog.dismiss();
-                        progressDialog = new ProgressDialog(context);
-                        progressDialog.setTitle("Save To File");
-                        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Save for one time Download", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                progressDialog1 = new ProgressDialog(context);
-                                progressDialog1.setMax(721);
-                                progressDialog1.setTitle("Saving Files");
-                                progressDialog1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                progressDialog1.show();
-                                new Thread(SaveToFileBitmaps).start();
-                            }
-                        });
-                        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Don't Want to Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                        progressDialog.show();
-                    }
-
-                    break;
-                case 2:
-                    cnt++;
-                    progressDialog.setProgress(cnt);
-                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
-                    listView.deferNotifyDataSetChanged();
-
-                    break;
-                case 3:
-                    listView.setAdapter(new CustomList(Main_Pokemons_Object));
-                    listView.deferNotifyDataSetChanged();
-                    break;
-                case 4:
-                    num1++;
-                    progressDialog1.setProgress(num1);
-                    if (num1 >= 720 && progressDialog1.isShowing()) {
-                        progressDialog1.dismiss();
-                    }
-                    break;
-                default:
-                    num++;
-                    if (num <= 4) {
-                        floatingActionButton.setImageResource(R.drawable.ic_sync_black);
-                    } else {
-                        floatingActionButton.hide();
-                    }
-
-            }
-
-        }
-    };
     //    public static final String ARG_position = "ARG_postion";
     private EditText SearchET;
 
@@ -213,37 +218,20 @@ public class Pokedex_List extends Fragment {
         integerStringHashMap = new HashMap<>();
         stringIntegerHashMap = new HashMap<>();
         ReversLocation = new HashMap<>();
-        location = new int[(getRandomInt(10,20)*4)+1];
+        location = new int[73];
         location[location.length - 1] = 720;
 
         AdView adView = (AdView) rootView.findViewById(R.id.adView);
         AdRequest request = new AdRequest.Builder().build();
         adView.loadAd(request);
 
-        for (int i = 0;i<location.length-1;i=i+4) {
-            int x = getRandomInt(8,100)*2;
-            location[i] = x;
-            ReversLocation.put(x,i);
-            x = getRandomInt(100,200)*2;
-            while (x == 0){
-                x = getRandomInt(20+i,30+i) + getRandomInt(20,30)*2;
+        for (int i = 1; i < location.length; i++) {
+            int x = getRandomInt(10 * (i - 1), i * 10);
+            if (x % 2 != 0) {
+                x--;
             }
-            ReversLocation.put(x,i+1);
-            location[i+1] = x;
-            x = getRandomInt(200,300)*2;
-            while (x == 0){
-                x = getRandomInt(40+i,50+i) + getRandomInt(40,50)*2;
-            }
-            ReversLocation.put(x,i+2);
-            location[i+2] = x;
-
-            x = getRandomInt(300,360)*2;
-            while (x == 0){
-                x = getRandomInt(40+i,50+i) + getRandomInt(40,50)*2;
-            }
-            ReversLocation.put(x,i+3);
-            location[i+3] = x;
-
+            location[i - 1] = x;
+            ReversLocation.put(x, i - 1);
         }
         adCretor();
 
@@ -344,6 +332,7 @@ public class Pokedex_List extends Fragment {
 
         SearchET = (EditText) rootView.findViewById(R.id.SearchET);
         SearchET.clearFocus();
+        final LinearLayout SearchLayout = (LinearLayout) rootView.findViewById(R.id.SearchLayout);
         ImageView searchIV = (ImageView) rootView.findViewById(R.id.SearchIV);
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -375,6 +364,36 @@ public class Pokedex_List extends Fragment {
             }
         });
         listView.setOnItemClickListener(new ListItemListner());
+        final Animation close_animation = AnimationUtils.loadAnimation(getActivity(), R.anim.close_view);
+        final Animation open_animation = AnimationUtils.loadAnimation(getActivity(), R.anim.open_view);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                final ListView lw = listView;
+                if (scrollState == 0)
+                    Log.i("a", "scrolling stopped...");
+                if (view.getId() == lw.getId()) {
+                    final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
+                    if (currentFirstVisibleItem > mLastFirstVisibleItem && scrollState == SCROLL_STATE_FLING) {
+                        mIsScrollingUp = false;
+                        SearchLayout.setAnimation(close_animation);
+                        SearchLayout.setVisibility(View.GONE);
+                        Log.i("a", "scrolling down...");
+                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        mIsScrollingUp = true;
+                        SearchLayout.setAnimation(open_animation);
+                        SearchLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
         return rootView;
     }
 
@@ -519,7 +538,7 @@ public class Pokedex_List extends Fragment {
                 String id = data.getStringExtra("PokeID");
                 String name = data.getStringExtra("PokeIString");
                 if (Integer.valueOf(id) != 0) {
-                    Intent intent = new Intent(getActivity().getBaseContext(), PoekmonViewFragment.class);
+                    Intent intent = new Intent(getActivity().getBaseContext(), PokemonActivity.class);
                     intent.putExtra(PoekmonViewFragment.ARG_NAME, name);
                     intent.putExtra(PoekmonViewFragment.ARG_NUM, Integer.valueOf(id));
                     startActivityForResult(intent, 1);
@@ -604,7 +623,7 @@ public class Pokedex_List extends Fragment {
             if (!PokemonListObject.get(i).getName().equals("Ad")) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (connectivityManager.getActiveNetworkInfo().isConnected() && connectivityManager.getActiveNetworkInfo() != null) {
-                    Intent intent = new Intent(getActivity().getBaseContext(), PoekmonViewFragment.class);
+                    Intent intent = new Intent(getActivity().getBaseContext(), PokemonActivity.class);
                     intent.putExtra(PoekmonViewFragment.ARG_NAME, PokemonListObject.get(i).getName());
                     intent.putExtra(PoekmonViewFragment.ARG_NUM, PokemonListObject.get(i).getID());
                     startActivityForResult(intent, 1);

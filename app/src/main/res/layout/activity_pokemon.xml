@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_pokemon"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_layout"
+    android:paddingBottom="@dimen/activitymargin"
+    android:paddingLeft="@dimen/activitymargin"
+    android:paddingRight="@dimen/activitymargin"
+    android:paddingTop="@dimen/activitymargin"
+    tools:context="com.shne.pokedex.PokemonActivity">
+
+    <LinearLayout
+        android:id="@+id/GenralData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/NewMainPic"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/NewMainPic"
+        android:layout_marginTop="@dimen/activitymargin"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TypeTitleN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_title"
+                android:text="@string/type"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_data"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/Type1N"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    app:srcCompat="@drawable/bug" />
+
+                <ImageView
+                    android:id="@+id/Type2N"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    app:srcCompat="@drawable/bug" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/HeightTitleN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_title"
+                android:paddingTop="@dimen/activitymargin"
+                android:text="@string/height"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu" />
+
+            <TextView
+                android:id="@+id/HeightDataN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_data"
+                android:text="1.5 kg"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/WeightTitleN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_title"
+                android:text="@string/weight"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu" />
+
+            <TextView
+                android:id="@+id/WeightDataN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_data"
+                android:paddingBottom="@dimen/activitymargin"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="1.0 m" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/NewMainPic"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/NewMainTitle"
+        android:background="@drawable/bg_pic"
+        app:srcCompat="@drawable/test10" />
+
+    <TextView
+        android:id="@+id/NewMainTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <ListView
+        android:id="@+id/PokdexEntryListN"
+        style="@android:style/Widget.DeviceDefault.ListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/GenralData"
+        android:layout_below="@+id/NewMainTitle"
+        android:layout_toEndOf="@+id/NewMainPic"
+        android:padding="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/GenralData"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:weightSum="3">
+
+        <ListView
+            android:id="@+id/Evo1LN"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/Evo2LN"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/Evo3LN"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_fabN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:src="@mipmap/fab_pokeball"
+            app:backgroundTint="@color/black"
+            app:elevation="12dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/open_BrowserN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/main_fabN"
+            android:clickable="false"
+            android:src="@drawable/ic_explore"
+            android:visibility="invisible"
+            app:backgroundTint="@color/black"
+            app:elevation="12dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/var_fabN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/open_BrowserN"
+            android:clickable="false"
+            android:src="@mipmap/mega_or_var"
+            android:visibility="invisible"
+            app:backgroundTint="@color/black"
+            app:elevation="12dp" />
+
+    </RelativeLayout>
+</RelativeLayout>
